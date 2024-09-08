@@ -321,3 +321,32 @@ Output LOCK: 0
 $finish called at time : 5950 ns : File "/home/leonel/Desktop/vivado_projects/lfsr_project/lfsr_project.srcs/sim_1/new/tb_LFSR_generator.v" Line 117
 
 ```
+
+## TOP
+
+Para finalizar con el proyecto se programó un top, y su respectivo testbench para pruebas. En un principio este top.v es un código sencillo donde se instancia al generador y al checker pero, siguiendo con la consigna, en medio se agrega la línea
+```
+    assign corrupted_LFSR = i_corrupt ? {LFSR_output[7:1], ~LFSR_output[0]} : LFSR_output           ;
+```
+Para enviar una secuencia válida o no.
+
+# Síntesis
+
+Para la síntesis o implementación sobre FPGAs, fue necesario crear una instancia de VIO e ILA para poder estimular la FPGA remota.
+
+Quedando el esquemático del proyecto:
+
+![schematic](/img/final_schematic.png)
+
+A continuación el orden de las entradas del VIO:
+
+![vio](/img/vio_order.png)
+
+A la señal o_lock **(probe_in1_0)**, se le asignó un led de la siguiente forma:
+![led](/img/led_values.png)
+
+A continuación un corto video mostrando el funcionamiento del proyecto, donde generan secuencias validas con i_corrupt en 0, algunas secuencias inválidas, y un réset asíncrono donde se ve el cambio de las seeds y del led.
+
+***-(entrar con mail @unc.edu.ar o @mi.unc.edu.ar)-***
+
+https://drive.google.com/file/d/1ZyolMcJxQiKkbiq-bOfznAyws7GErmt3/view?usp=sharing
