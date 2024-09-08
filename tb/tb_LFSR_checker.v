@@ -4,22 +4,23 @@ module tb_LFSR_checker;
     
     `define TEST3
     reg clk                                                                 ;
-    reg reset                                                               ;
+    reg reset_n                                                               ;
     reg i_valid                                                             ;
-    reg i_soft_reset                                                        ;
+    reg i_soft_reset_n                                                        ;
     reg [7:0] i_seed                                                        ;
     reg [7:0] i_LFSR                                                        ;
     reg [4:0] max_valid                                                     ;
     reg [4:0] max_invalid                                                   ;
     wire o_lock                                                             ;
     
-    wire feedback = LFSR_reg[7] ^ (LFSR_reg[6:0]==7'b0000000)               ;
+    
     reg [7:0] LFSR_reg                                                      ;
+    wire feedback = LFSR_reg[7] ^ (LFSR_reg[6:0]==7'b0000000)               ;
 
     // Instanciación del módulo LFSR_checker
     LFSR_checker uut (
         .clk(clk)                                                           ,
-        .reset(reset)                                                       ,
+        .reset_n(reset_n)                                                       ,
         .i_valid(i_valid)                                                   ,
         //.i_soft_reset(i_soft_reset)                                         ,
         //.i_seed(i_seed)                                                     ,
@@ -34,12 +35,12 @@ module tb_LFSR_checker;
         // Inicialización
         max_valid =8'h00;
         max_invalid=8'h00;
-        reset = 1                                                           ;
+        reset_n = 1                                                           ;
         i_valid = 0                                                         ;
-        i_soft_reset = 0                                                    ;
+        i_soft_reset_n = 0                                                    ;
         i_seed = 8'b11111111                                                ;
 
-        @(posedge clk) reset = 0                                            ;
+        @(posedge clk) reset_n = 0                                            ;
         
         `ifdef  TEST1
             begin
@@ -58,10 +59,10 @@ module tb_LFSR_checker;
                 max_invalid=10;
             end
         `endif
-        // Configurar seed y aplicar soft reset
-        i_soft_reset = 1                                                    ;
+        // Configurar seed y aplicar soft reset_n
+        i_soft_reset_n = 1                                                    ;
         @(posedge clk)                                                      ;
-        i_soft_reset = 0                                                    ;
+        i_soft_reset_n = 0                                                    ;
         LFSR_reg= 8'b00000001;
         
        

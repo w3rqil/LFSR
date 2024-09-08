@@ -5,7 +5,7 @@ module tb_LFSR_generator;
     // Señales del testbench
     reg     clk                                                                                 ;
     reg     i_valid                                                                             ;
-    reg     i_rst                                                                               ;
+    reg     i_rst_n                                                                               ;
     reg     i_soft_reset                                                                        ;
     reg     [7:0] i_seed                                                                        ;
     wire    [7:0] o_LFSR                                                                        ;   
@@ -15,7 +15,7 @@ LFSR_generator uut
 (
     .clk(clk)                                                                                   ,
     .i_valid(i_valid)                                                                           ,
-    .i_rst(i_rst)                                                                               ,
+    .i_rst_n(i_rst_n)                                                                               ,
     .i_soft_reset(i_soft_reset)                                                                 ,
     .i_seed(i_seed)                                                                             ,
     .o_LFSR(o_LFSR)
@@ -31,14 +31,14 @@ task change_seed(input [7:0] new_seed)                                          
     end
 endtask
 
-//! Task para setear el reset asincrónico (i_rst)
+//! Task para setear el reset asincrónico (i_rst_n)
 task async_reset                                                                                ;   
     reg [7:0] random_reset_async;                           
     begin
         random_reset_async= urandom_range(1,2000);
-        @(posedge clk) i_rst = 1                                                                ;
+        @(posedge clk) i_rst_n = 1                                                                ;
         # random_reset_async                                                                    ;           // delay aleatorio entre 1us y 250us
-        @(posedge clk) i_rst = 0                                                                ;
+        @(posedge clk) i_rst_n = 0                                                                ;
     end
 endtask
 
@@ -149,7 +149,7 @@ initial begin
     $display("Enters initial cycle");
     clk             = 0                                                                         ;
     i_valid         = 0                                                                         ;
-    i_rst           = 0                                                                         ;  
+    i_rst_n           = 0                                                                         ;  
     i_soft_reset    = 0                                                                         ;
     i_seed          = 8'b11111111                                                               ; // Valor inicial del seed
     

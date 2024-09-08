@@ -11,7 +11,7 @@ module tb_TOP_LFSR;
     wire o_lock;
 
     // Instanciación del módulo TOP_LFSR
-    TOP_LFSR uut (
+    top uut (
         .clk(clk),
         .i_rst(i_rst),
         .i_soft_reset(i_soft_reset),
@@ -22,41 +22,41 @@ module tb_TOP_LFSR;
     );
 
     // Generación de clock a 100 MHz
-    initial begin
-        clk = 0;
-        forever #5 clk = ~clk; // 5 ns para 100 MHz
-    end
+    always #50 clk = ~clk; // 5 ns para 100 MHz
+    
 
     initial begin
         // Inicialización de señales
-        i_rst = 1;
-        i_soft_reset = 0;
-        i_valid = 0;
-        i_seed = 8'hFF;
-        i_corrupt = 0;
-        
-        // Liberar reset después de 200 ns
-        #200;
-        i_rst = 0;
-        
-        // Aplicar soft reset
-        #100;
-        i_soft_reset = 1;
-        #10;
-        i_soft_reset = 0;
-        
-        // Generar una secuencia válida
-        i_valid = 1;
-        #500;
-        i_valid = 0;
+        clk=0;
+        i_rst = 1               ;
+        i_soft_reset = 0        ;
+        i_valid = 0             ;
+        i_seed = 8'b11111111    ;
+        i_corrupt = 0           ;
 
-        // Corromper la secuencia
-        i_corrupt = 1;
-        i_valid = 1;
-        #500;
-        i_valid = 0;
+        @(posedge clk)          ;
+        i_rst   = 0             ;
+        i_soft_reset = 1        ;
 
-        // Finalizar simulación
+        @(posedge clk)          ;
+        i_soft_reset = 0        ;
+
+        #2000
+
+        repeat(26) begin
+          i_valid = 1;
+          @(posedge clk);
+        end
+        i_valid = 0;
+        i_corrupt = 1 ;
+        repeat (6) begin
+        i_valid = 1;
+        @(posedge clk);
+        end
+        
+        i_valid = 0;
+        
+        // finish 
         #200;
         $finish;
     end
