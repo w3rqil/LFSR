@@ -4,18 +4,17 @@ module top
    
 );
 
-     wire i_rst                                                                                ;         // Asynchronous reset
-     wire i_soft_reset                                                                         ;         // Synchronous reset
-     wire i_valid                                                                              ;         // Validation signal
-     wire [7:0] i_seed                                                                         ;         // Seed input
-     wire i_corrupt                                                                            ;         // Corruption signal
-     wire o_lock                                                                               ;        // Lock output
-    wire [7:0] o_LFSR_checker;
-//
-    wire [7:0] LFSR_output                                                                     ;       // Output of LFSR_generator
-    wire [7:0] corrupted_LFSR                                                                  ;       // Corrupted LFSR sequence
-    //wire       o_valid                                                                              ;
-   //wire soft_checker;
+    wire        i_rst                                                                               ;         // Asynchronous reset
+    wire        i_soft_reset                                                                        ;         // Synchronous reset
+    wire        i_valid                                                                             ;         // Validation signal
+    wire [7:0]  i_seed                                                                              ;         // Seed input
+    wire        i_corrupt                                                                           ;         // Corruption signal
+    wire        o_lock                                                                              ;         // Lock output
+    wire [7:0]  o_LFSR_checker                                                                      ;      
+     
+    wire [7:0]  LFSR_output                                                                         ;         // Output of LFSR_generator
+    wire [7:0]  corrupted_LFSR                                                                      ;         // Corrupted LFSR sequence
+
 
 
     //! Instancia del LFSR_generator
@@ -37,7 +36,7 @@ module top
     LFSR_checker U2_LFSR_checker 
     (
         .clk(clk)                                                                                   ,
-        .i_reset(i_rst)                                                                               ,
+        .i_reset(i_rst)                                                                             ,
         .i_valid(i_valid)                                                                           ,
         .i_LFSR(corrupted_LFSR)                                                                     ,
         .o_LFSR_checker(o_LFSR_checker),
@@ -49,7 +48,7 @@ module top
     u_vio
     (
         .clk_0   (clk)                                                                              ,
-        .probe_in0_0 (corrupted_LFSR)                                                                       ,
+        .probe_in0_0 (corrupted_LFSR)                                                               ,
         .probe_in1_0 (o_lock)                                                                       ,
         .probe_in2_0 (o_LFSR_checker)                                                               ,
         
@@ -63,11 +62,11 @@ module top
     ila 
     u_ila
     (
-        .clk_0(clk)                     ,
-        .probe0_0(corrupted_LFSR)       ,
-        .probe1_0(o_LFSR_checker)               ,
-        .probe2_0(i_valid)              ,
-        .probe3_0(i_rst)                ,
+        .clk_0(clk)                                                                                 ,
+        .probe0_0(corrupted_LFSR)                                                                   ,
+        .probe1_0(o_LFSR_checker)                                                                   ,
+        .probe2_0(i_valid)                                                                          ,
+        .probe3_0(i_rst)                                                                            ,
         .probe4_0(i_soft_reset)
     );
 endmodule

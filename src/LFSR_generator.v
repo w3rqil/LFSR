@@ -36,13 +36,6 @@ always @(posedge clk or posedge i_rst) begin
 end
 
 assign o_LFSR = LFSR                                            ;
-//assign o_valid = i_valid                                        ;
-/*
-always @(posedge clk) begin//! muestro en la salida el valor del LFSR solo si i_valid está activo
 
-    if (i_valid) begin
-        o_LFSR <= LFSR                  ;
-    end
-end*/
 
 endmodule
